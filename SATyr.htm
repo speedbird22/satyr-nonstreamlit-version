@@ -1,0 +1,1566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SATyr AI</title>
+<!-- Direct link to The Wood Essence font -->
+<link href="https://fonts.cdnfonts.com/css/the-wood-essence" rel="stylesheet">
+<style>
+/* Base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'TheWoodEssence', serif;
+}
+
+/* System font stack for header elements and tagline */
+header, nav, .logo, nav a, .footer-text, .tagline-word {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+body {
+    color: white;
+    min-height: 100vh;
+    overflow-x: hidden;
+    background: #000000;
+    cursor: default;
+}
+
+/* Header styles */
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 10;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 20px 40px;
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+}
+
+/* Logo styles */
+.logo {
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    opacity: 1;
+    position: absolute;
+    left: 0;
+    font-weight: bold;
+    font-size: 24px;
+    text-decoration: none;
+    color: white;
+}
+
+body:not(.home-active) .logo {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-20px);
+}
+
+/* Navigation styles */
+nav {
+    display: flex;
+    gap: 30px;
+    margin: 0 auto;
+    justify-content: center;
+    transition: all 0.5s ease;
+    position: relative;
+    z-index: 2;
+}
+
+nav a {
+    color: #AAAAAA;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 14px;
+    letter-spacing: 1px;
+    transition: color 0.3s ease;
+    cursor: pointer;
+    padding: 5px 0;
+}
+
+nav a:hover {
+    color: white;
+}
+
+nav a.active {
+    color: white;
+    position: relative;
+}
+
+nav a.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: white;
+}
+
+/* Main content styles */
+main {
+    padding-top: 80px;
+    position: relative;
+}
+
+/* Section styles */
+section {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    position: absolute;
+    top: 80px;
+    left: 0;
+    width: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+section.active {
+    display: block;
+    opacity: 1;
+    pointer-events: auto;
+    z-index: 2;
+}
+
+section.fade-out {
+    opacity: 0;
+}
+
+.home-section {
+    display: block;
+    opacity: 1;
+    pointer-events: auto;
+    z-index: 2;
+}
+
+/* Hero section styles */
+.hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: calc(100vh - 200px);
+    position: relative;
+    padding: 0 20px;
+}
+
+.hero-title {
+    font-size: 180px;
+    font-weight: 500;
+    margin-bottom: 60px;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.9) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    letter-spacing: -5px;
+}
+
+/* Animated tagline styles */
+.animated-tagline {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+.tagline-word {
+    font-size: 36px;
+    font-weight: bold;
+    opacity: 0;
+    animation-fill-mode: forwards;
+    animation-duration: 1.5s;
+    /* Font family is now set in the common selector above */
+}
+
+.word1 {
+    animation-name: fadeIn;
+    animation-delay: 0.5s;
+}
+
+.word2 {
+    animation-name: fadeIn;
+    animation-delay: 2s;
+}
+
+.word3 {
+    animation-name: fadeIn;
+    animation-delay: 3.5s;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Scroll down arrow styles */
+.scroll-down-arrow {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    cursor: pointer;
+    animation: pulse 2s infinite ease-in-out;
+    transition: opacity 0.3s ease;
+}
+
+.scroll-down-arrow svg {
+    width: 40px;
+    height: 40px;
+    fill: rgba(255, 255, 255, 0.8);
+}
+
+.scroll-down-arrow:hover {
+    opacity: 0.7;
+}
+
+@keyframes pulse {
+    0% {
+        transform: translateX(-50%) translateY(0);
+        opacity: 0.8;
+    }
+    50% {
+        transform: translateX(-50%) translateY(10px);
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(-50%) translateY(0);
+        opacity: 0.8;
+    }
+}
+
+/* SAT Background Elements */
+.sat-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.sat-element {
+    position: absolute;
+    color: rgba(255, 255, 255, 0.5); /* 50% opacity */
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-weight: 300;
+    white-space: nowrap;
+    transform-origin: center;
+    will-change: transform, opacity;
+    z-index: 0;
+}
+
+.sat-word {
+    font-size: 18px; /* Increased font size */
+}
+
+.sat-equation {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 22px; /* Increased font size */
+}
+
+/* Light effect styles */
+.light-effect {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.light-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    transition: background 1s ease;
+    will-change: transform;
+}
+
+/* Light blob colors for different sections */
+body.home-active .light-blob {
+    background: radial-gradient(circle, rgba(255, 200, 100, 1), rgba(255, 200, 100, 0.3));
+}
+
+body.games-active .light-blob {
+    background: radial-gradient(circle, rgba(128, 0, 128, 1), rgba(128, 0, 128, 0.3));
+}
+
+body.notes-active .light-blob {
+    background: radial-gradient(circle, rgba(0, 128, 128, 1), rgba(0, 128, 128, 0.3));
+}
+
+body.ai-active .light-blob {
+    background: radial-gradient(circle, rgba(0, 128, 255, 1), rgba(0, 128, 255, 0.3));
+}
+
+body.friends-active .light-blob {
+    background: radial-gradient(circle, rgba(255, 64, 129, 1), rgba(255, 64, 129, 0.3));
+}
+
+body.settings-active .light-blob {
+    background: radial-gradient(circle, rgba(76, 175, 80, 1), rgba(76, 175, 80, 0.3));
+}
+
+body.login-active .light-blob {
+    background: radial-gradient(circle, rgba(255, 152, 0, 1), rgba(255, 152, 0, 0.3));
+}
+
+body.mission-vision-active .light-blob {
+    background: radial-gradient(circle, rgba(100, 181, 246, 1), rgba(100, 181, 246, 0.3));
+}
+
+/* Two-column layout styles */
+.features-section {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    padding: 40px 20px;
+    margin-top: 40px;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.features-container {
+    display: flex;
+    width: 100%;
+    max-width: 1200px;
+    gap: 40px; /* Increased gap between columns */
+}
+
+.feature-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 30px;
+    position: relative;
+}
+
+.feature-column:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 10%;
+    height: 80%;
+    width: 1px;
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.feature-title {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: white;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.feature-description {
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 30px;
+    color: rgba(255, 255, 255, 0.7);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    flex-grow: 1;
+}
+
+.feature-image {
+    width: 100%;
+    height: 200px; /* Increased height */
+    margin: 15px 0; /* Adjusted margin */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.controller-container {
+    width: 90%;
+    height: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(30, 30, 30, 0.3);
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.controller-icon {
+    width: 100%;
+    height: 100%;
+    max-width: 300px;
+    max-height: 160px;
+    opacity: 0.9;
+}
+
+.api-mockup {
+    width: 100%;
+    height: 100%;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    background-color: #1a1a1a; /* Darker background to match the image */
+    overflow: hidden; /* Prevent overflow */
+}
+
+.mockup-header {
+    height: 24px; /* Reduced height */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    background-color: #222222; /* Darker header */
+}
+
+.mockup-title {
+    color: rgba(255, 215, 0, 0.8); /* Gold color for SATyr Chat */
+    font-size: 12px;
+}
+
+.mockup-controls {
+    margin-left: auto;
+    display: flex;
+    gap: 5px;
+}
+
+.mockup-control {
+    width: 10px; /* Smaller controls */
+    height: 10px; /* Smaller controls */
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.mockup-body {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Prevent overflow */
+}
+
+/* Chat mockup styles */
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: #1a1a1a; /* Darker background */
+}
+
+.chat-messages {
+    flex-grow: 1;
+    padding: 10px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.message {
+    max-width: 85%;
+    padding: 8px 12px;
+    border-radius: 18px;
+    font-size: 11px;
+    line-height: 1.3;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.message-user {
+    align-self: flex-end;
+    background-color: #3b3363; /* Purple color from the image */
+    border-bottom-right-radius: 5px;
+    color: white;
+}
+
+.message-bot {
+    align-self: flex-start;
+    background-color: #333333; /* Dark gray from the image */
+    border-bottom-left-radius: 5px;
+    color: white;
+}
+
+.chat-input {
+    display: flex;
+    padding: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: #1a1a1a; /* Darker background */
+}
+
+.chat-input-field {
+    flex-grow: 1;
+    background-color: #333333; /* Dark gray from the image */
+    border: none;
+    border-radius: 20px;
+    padding: 6px 12px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 11px;
+    outline: none;
+}
+
+.chat-send-button {
+    background-color: #3b3363; /* Purple color from the image */
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    margin-left: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.chat-send-icon {
+    width: 10px;
+    height: 10px;
+    fill: white;
+}
+
+.feature-button {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 20px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50px;
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    background-color: transparent;
+}
+
+.feature-button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.button-icon {
+    margin-left: 8px;
+    font-size: 16px;
+}
+
+/* Work in progress section styles */
+.wip-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: calc(100vh - 200px);
+    text-align: center;
+    padding: 0 20px;
+}
+
+.wip-title {
+    font-size: 48px;
+    margin-bottom: 20px;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.9) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.wip-subtitle {
+    font-size: 24px;
+    margin-bottom: 40px;
+    max-width: 600px;
+    line-height: 1.5;
+}
+
+.back-button {
+    background: transparent;
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50px;
+    padding: 12px 24px;
+    font-size: 16px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    display: inline-block;
+}
+
+.back-button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* AI Chat Interface */
+.ai-chat-container {
+    max-width: 800px;
+    width: 90%;
+    margin: 100px auto 0;
+    background-color: rgba(30, 30, 30, 0.7);
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 70vh;
+}
+
+.ai-chat-header {
+    padding: 20px;
+    background-color: rgba(0, 128, 255, 0.2);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.ai-chat-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: white;
+    text-align: center;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.ai-chat-body {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.ai-message {
+    max-width: 80%;
+    padding: 12px 16px;
+    border-radius: 18px;
+    font-size: 14px;
+    line-height: 1.5;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.ai-message-bot {
+    align-self: flex-start;
+    background-color: rgba(0, 128, 255, 0.3);
+    border-bottom-left-radius: 5px;
+    color: white;
+}
+
+.ai-chat-form {
+    padding: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    gap: 10px;
+}
+
+.ai-chat-input {
+    flex-grow: 1;
+    background-color: rgba(50, 50, 50, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 30px;
+    padding: 12px 20px;
+    color: white;
+    font-size: 14px;
+    outline: none;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.ai-chat-input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.ai-chat-submit {
+    background-color: rgba(0, 128, 255, 0.7);
+    border: none;
+    border-radius: 30px;
+    padding: 12px 24px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.ai-chat-submit:hover {
+    background-color: rgba(0, 128, 255, 0.9);
+}
+
+/* Login Section Styles */
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: calc(100vh - 200px);
+    text-align: center;
+    padding: 0 20px;
+}
+
+.login-description {
+    font-size: 18px;
+    line-height: 1.6;
+    margin-bottom: 40px;
+    max-width: 600px;
+    color: #FFA726; /* Gold/orange color to match the login button */
+    background: linear-gradient(135deg, rgba(255, 152, 0, 1) 0%, rgba(255, 94, 0, 1) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-weight: 500;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.login-button {
+    background: linear-gradient(135deg, rgba(255, 152, 0, 0.8) 0%, rgba(255, 94, 0, 0.8) 100%);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 16px 40px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 20px rgba(255, 152, 0, 0.3);
+    margin-bottom: 20px;
+    min-width: 200px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    position: relative;
+    overflow: hidden;
+}
+
+.login-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: 0.5s;
+}
+
+.login-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 25px rgba(255, 152, 0, 0.4);
+}
+
+.login-button:hover::before {
+    left: 100%;
+}
+
+.signup-button {
+    background: transparent;
+    color: white;
+    border: 2px solid rgba(255, 152, 0, 0.6);
+    border-radius: 50px;
+    padding: 14px 38px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 200px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.signup-button:hover {
+    background-color: rgba(255, 152, 0, 0.1);
+    border-color: rgba(255, 152, 0, 0.8);
+}
+
+/* Mission and Vision Section Styles */
+.mission-vision-container {
+    max-width: 1000px;
+    margin: 100px auto 50px;
+    padding: 0 20px;
+}
+
+.mission-vision-header {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.mission-vision-title {
+    font-size: 48px;
+    margin-bottom: 20px;
+    background: linear-gradient(90deg, rgba(100, 181, 246, 0.8) 0%, rgba(30, 136, 229, 0.9) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.mission-vision-subtitle {
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.7);
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+.mission-vision-content {
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
+}
+
+.mission-section, .vision-section {
+    background-color: rgba(30, 30, 30, 0.5);
+    border-radius: 15px;
+    padding: 40px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.section-title {
+    font-size: 32px;
+    margin-bottom: 25px;
+    color: white;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 10px;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 3px;
+}
+
+.mission-section .section-title::after {
+    background-color: rgba(100, 181, 246, 0.8);
+}
+
+.vision-section .section-title::after {
+    background-color: rgba(30, 136, 229, 0.8);
+}
+
+.section-content {
+    font-size: 16px;
+    line-height: 1.8;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.section-content p {
+    margin-bottom: 20px;
+}
+
+.section-content p:last-child {
+    margin-bottom: 0;
+}
+
+.values-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 30px;
+}
+
+.value-item {
+    background-color: rgba(30, 136, 229, 0.2);
+    border-radius: 10px;
+    padding: 20px;
+    flex: 1 1 calc(50% - 20px);
+    min-width: 200px;
+}
+
+.value-title {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: rgba(100, 181, 246, 0.9);
+}
+
+.value-description {
+    font-size: 14px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .features-container {
+        flex-direction: column;
+    }
+    
+    .feature-column:not(:last-child)::after {
+        display: none;
+    }
+    
+    .feature-column {
+        padding: 20px;
+    }
+    
+    .hero-title {
+        font-size: 100px;
+    }
+    
+    .animated-tagline {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .ai-chat-container {
+        width: 95%;
+        height: 80vh;
+    }
+    
+    .login-description {
+        font-size: 16px;
+        padding: 0 10px;
+    }
+    
+    .mission-vision-title {
+        font-size: 36px;
+    }
+    
+    .section-title {
+        font-size: 28px;
+    }
+    
+    .mission-section, .vision-section {
+        padding: 30px;
+    }
+    
+    .values-list {
+        flex-direction: column;
+    }
+    
+    .value-item {
+        flex: 1 1 100%;
+    }
+    
+    nav {
+        gap: 15px;
+    }
+    
+    nav a {
+        font-size: 12px;
+    }
+}
+</style>
+</head>
+<body class="home-active">
+<!-- SAT Background Elements -->
+<div class="sat-background" id="sat-background"></div>
+
+<!-- Light effect overlay -->
+<div class="light-effect">
+<div class="light-blob" id="blob1" style="width: 600px; height: 600px; opacity: 0.3;"></div>
+<div class="light-blob" id="blob2" style="width: 400px; height: 400px; opacity: 0.4;"></div>
+<div class="light-blob" id="blob3" style="width: 300px; height: 300px; opacity: 0.5;"></div>
+</div>
+
+<!-- Header -->
+<header>
+<div class="header-container">
+    <a href="#" class="logo">SATyr</a>
+    <nav>
+        <a class="nav-link active" data-section="home">Home</a>
+        <a class="nav-link" data-section="games">Games</a>
+        <a class="nav-link" data-section="notes">Notes</a>
+        <a class="nav-link" data-section="ai">AI</a>
+        <a class="nav-link" data-section="mission-vision">Mission & Vision</a>
+        <a class="nav-link" data-section="friends">Friends</a>
+        <a class="nav-link" data-section="settings">Settings</a>
+        <a class="nav-link" data-section="login">Login</a>
+    </nav>
+</div>
+</header>
+
+<!-- Main content -->
+<main>
+<!-- Home Section -->
+<section id="home" class="home-section active">
+<div class="hero">
+    <h1 class="hero-title">SATyr</h1>
+    <!-- Animated tagline replacing the search box with punctuation -->
+    <div class="animated-tagline">
+        <span class="tagline-word word1">Practice,</span>
+        <span class="tagline-word word2">Perfect,</span>
+        <span class="tagline-word word3">Perform.</span>
+    </div>
+    
+    <!-- Scroll down arrow -->
+    <div class="scroll-down-arrow" id="scroll-down-arrow">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+        </svg>
+    </div>
+</div>
+
+<!-- Two-column features section -->
+<div class="features-section">
+    <div class="features-container">
+        <!-- Column 1: GAMES (previously SATyr) -->
+        <div class="feature-column">
+            <h2 class="feature-title">GAMES</h2>
+            <p class="feature-description">
+                Reinforce concepts and stay engaged with subject-specific games designed to make learning active, enjoyable, and effective.
+            </p>
+            <div class="feature-image">
+                <div class="controller-container">
+                    <!-- Improved game controller icon -->
+                    <svg class="controller-icon" viewBox="0 0 300 160" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Controller body -->
+                        <path d="M30,80 C30,50 50,30 80,20 C110,10 140,5 150,5 C160,5 190,10 220,20 C250,30 270,50 270,80 
+                                 C270,110 260,130 240,140 C220,150 180,155 150,155 
+                                 C120,155 80,150 60,140 C40,130 30,110 30,80 Z" 
+                              fill="rgba(40,40,40,0.5)" 
+                              stroke="rgba(255,255,255,0.8)" 
+                              stroke-width="2"/>
+                        
+                        <!-- Left side -->
+                        <circle cx="70" cy="80" r="25" 
+                                fill="rgba(60,60,60,0.5)" 
+                                stroke="rgba(255,255,255,0.8)" 
+                                stroke-width="1.5"/>
+                        
+                        <!-- D-pad -->
+                        <!-- Up -->
+                        <rect x="65" y="60" width="10" height="15" 
+                              fill="rgba(80,80,80,0.7)" 
+                              stroke="rgba(255,255,255,0.8)" 
+                              stroke-width="1"/>
+                        <!-- Right -->
+                        <rect x="75" y="75" width="15" height="10" 
+                              fill="rgba(80,80,80,0.7)" 
+                              stroke="rgba(255,255,255,0.8)" 
+                              stroke-width="1"/>
+                        <!-- Down -->
+                        <rect x="65" y="85" width="10" height="15" 
+                              fill="rgba(80,80,80,0.7)" 
+                              stroke="rgba(255,255,255,0.8)" 
+                              stroke-width="1"/>
+                        <!-- Left -->
+                        <rect x="50" y="75" width="15" height="10" 
+                              fill="rgba(80,80,80,0.7)" 
+                              stroke="rgba(255,255,255,0.8)" 
+                              stroke-width="1"/>
+                        
+                        <!-- Right side -->
+                        <circle cx="230" cy="80" r="25" 
+                                fill="rgba(60,60,60,0.5)" 
+                                stroke="rgba(255,255,255,0.8)" 
+                                stroke-width="1.5"/>
+                        
+                        <!-- Face buttons -->
+                        <circle cx="215" cy="65" r="8" 
+                                fill="rgba(80,80,80,0.7)" 
+                                stroke="rgba(255,255,255,0.8)" 
+                                stroke-width="1"/>
+                        <circle cx="245" cy="65" r="8" 
+                                fill="rgba(80,80,80,0.7)" 
+                                stroke="rgba(255,255,255,0.8)" 
+                                stroke-width="1"/>
+                        <circle cx="215" cy="95" r="8" 
+                                fill="rgba(80,80,80,0.7)" 
+                                stroke="rgba(255,255,255,0.8)" 
+                                stroke-width="1"/>
+                        <circle cx="245" cy="95" r="8" 
+                                fill="rgba(80,80,80,0.7)" 
+                                stroke="rgba(255,255,255,0.8)" 
+                                stroke-width="1"/>
+                        
+                        <!-- Center buttons -->
+                        <rect x="125" y="70" width="20" height="8" rx="4" ry="4"
+                              fill="rgba(80,80,80,0.7)" 
+                              stroke="rgba(255,255,255,0.8)" 
+                              stroke-width="1"/>
+                        <rect x="155" y="70" width="20" height="8" rx="4" ry="4"
+                              fill="rgba(80,80,80,0.7)" 
+                              stroke="rgba(255,255,255,0.8)" 
+                              stroke-width="1"/>
+                        
+                        <!-- Touchpad -->
+                        <rect x="125" y="85" width="50" height="25" rx="5" ry="5"
+                              fill="rgba(60,60,60,0.5)" 
+                              stroke="rgba(255,255,255,0.8)" 
+                              stroke-width="1"/>
+                    </svg>
+                </div>
+            </div>
+            <button class="feature-button" data-section="games">
+                PLAY NOW <span class="button-icon">→</span>
+            </button>
+        </div>
+        
+        <!-- Column 2: Smart SAT Assistance (previously API) -->
+        <div class="feature-column">
+            <h2 class="feature-title">Smart SAT Assistance</h2>
+            <p class="feature-description">
+                Get instant help with SAT questions, detailed explanations, tips, and strategy guidance — all in one intelligent chat interface.
+            </p>
+            <div class="feature-image">
+                <div class="api-mockup">
+                    <div class="mockup-header">
+                        <span class="mockup-title">SATyr Chat</span>
+                        <div class="mockup-controls">
+                            <div class="mockup-control"></div>
+                            <div class="mockup-control"></div>
+                        </div>
+                    </div>
+                    <div class="mockup-body">
+                        <div class="chat-container">
+                            <div class="chat-messages">
+                                <div class="message message-user">
+                                    How do I solve for x in the equation 2x + 5 = 13?
+                                </div>
+                                <div class="message message-bot">
+                                    To solve for x, you need to isolate it on one side of the equation.
+                                    <br><br>
+                                    2x + 5 = 13<br>
+                                    2x = 13 - 5<br>
+                                    2x = 8<br>
+                                    x = 4
+                                </div>
+                                <div class="message message-user">
+                                    Thanks! Can you explain the distributive property?
+                                </div>
+                            </div>
+                            <div class="chat-input">
+                                <input type="text" class="chat-input-field" placeholder="Ask a question...">
+                                <button class="chat-send-button">
+                                    <svg class="chat-send-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" fill="currentColor"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="feature-button" data-section="ai">
+                TRY NOW <span class="button-icon">→</span>
+            </button>
+        </div>
+    </div>
+</div>
+</section>
+
+<!-- Games Section (Work in Progress) -->
+<section id="games" class="games-section">
+<div class="wip-content">
+    <h1 class="wip-title">Games</h1>
+    <p class="wip-subtitle">Our games section is currently under development. We're working hard to bring you amazing games soon!</p>
+    <button class="back-button" data-section="home">Back to Home</button>
+</div>
+</section>
+
+<!-- Notes Section (Work in Progress) -->
+<section id="notes" class="notes-section">
+<div class="wip-content">
+    <h1 class="wip-title">Notes</h1>
+    <p class="wip-subtitle">Our notes section is currently under development. We're working hard to bring you amazing note-taking features soon!</p>
+    <button class="back-button" data-section="home">Back to Home</button>
+</div>
+</section>
+
+<!-- AI Section -->
+<section id="ai" class="ai-section">
+<div class="ai-chat-container">
+    <div class="ai-chat-header">
+        <h2 class="ai-chat-title">SATyr AI Assistant</h2>
+    </div>
+    <div class="ai-chat-body">
+        <div class="ai-message ai-message-bot">
+            Hello! I'm your SATyr AI Assistant. I can help you with SAT preparation, answer questions, and provide study tips. What would you like help with today?
+        </div>
+    </div>
+    <form id="ai-chat-form" class="ai-chat-form">
+        <input type="text" id="ai-chat-input" class="ai-chat-input" placeholder="Ask me anything about SAT preparation..." autocomplete="off">
+        <button type="submit" class="ai-chat-submit">Send</button>
+    </form>
+</div>
+</section>
+
+<!-- Mission and Vision Section -->
+<section id="mission-vision" class="mission-vision-section">
+<div class="mission-vision-container">
+    <div class="mission-vision-header">
+        <h1 class="mission-vision-title">Our Mission & Vision</h1>
+        <p class="mission-vision-subtitle">
+            At SATyr, we're committed to transforming SAT preparation through innovative technology and personalized learning experiences.
+        </p>
+    </div>
+    
+    <div class="mission-vision-content">
+        <div class="mission-section">
+            <h2 class="section-title">Our Mission</h2>
+            <div class="section-content">
+                <p>
+                    SATyr's mission is to democratize access to high-quality SAT preparation by leveraging artificial intelligence to create personalized, engaging, and effective learning experiences for students of all backgrounds.
+                </p>
+                <p>
+                    We believe that every student deserves the opportunity to reach their full potential, regardless of their socioeconomic status or geographic location. By combining cutting-edge AI technology with proven educational methodologies, we aim to level the playing field and help students achieve their academic goals.
+                </p>
+            </div>
+        </div>
+        
+        <div class="vision-section">
+            <h2 class="section-title">Our Vision</h2>
+            <div class="section-content">
+                <p>
+                    We envision a future where SAT preparation is not just effective but also engaging and accessible to all. Our platform adapts to each student's unique learning style, strengths, and weaknesses, providing a truly personalized educational experience.
+                </p>
+                <p>
+                    Beyond test preparation, we aim to instill a love for learning and critical thinking that will benefit students throughout their academic and professional careers. We're not just helping students achieve higher scores; we're helping them develop skills that will serve them for a lifetime.
+                </p>
+                
+                <div class="values-list">
+                    <div class="value-item">
+                        <h3 class="value-title">Innovation</h3>
+                        <p class="value-description">
+                            We continuously push the boundaries of what's possible in educational technology to provide the most effective learning tools.
+                        </p>
+                    </div>
+                    <div class="value-item">
+                        <h3 class="value-title">Accessibility</h3>
+                        <p class="value-description">
+                            We're committed to making high-quality SAT preparation available to students regardless of their background or circumstances.
+                        </p>
+                    </div>
+                    <div class="value-item">
+                        <h3 class="value-title">Personalization</h3>
+                        <p class="value-description">
+                            We believe that every student learns differently, and our platform adapts to individual learning styles and needs.
+                        </p>
+                    </div>
+                    <div class="value-item">
+                        <h3 class="value-title">Excellence</h3>
+                        <p class="value-description">
+                            We strive for excellence in everything we do, from the accuracy of our content to the effectiveness of our teaching methods.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+
+<!-- Friends Section (Work in Progress) -->
+<section id="friends" class="friends-section">
+<div class="wip-content">
+    <h1 class="wip-title">Friends</h1>
+    <p class="wip-subtitle">Our friends section is currently under development. We're working hard to bring you amazing social features soon!</p>
+    <button class="back-button" data-section="home">Back to Home</button>
+</div>
+</section>
+
+<!-- Settings Section (Work in Progress) -->
+<section id="settings" class="settings-section">
+<div class="wip-content">
+    <h1 class="wip-title">Settings</h1>
+    <p class="wip-subtitle">Our settings section is currently under development. We're working hard to bring you customization options soon!</p>
+    <button class="back-button" data-section="home">Back to Home</button>
+</div>
+</section>
+
+<!-- Login Section -->
+<section id="login" class="login-section">
+<div class="login-container">
+    <p class="login-description">Log in to continue where you left off, or sign up to access tailored guidance, smart practice tools, and engaging games — all designed to help you prepare with focus and confidence.</p>
+    <button class="login-button" id="login-button">Log In</button>
+    <button class="signup-button" id="signup-button">Sign Up</button>
+</div>
+</section>
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // DOM elements
+    const navLinks = document.querySelectorAll('.nav-link');
+    const sections = document.querySelectorAll('section');
+    const backButtons = document.querySelectorAll('.back-button');
+    const featureButtons = document.querySelectorAll('.feature-button');
+    const body = document.body;
+    const blob1 = document.getElementById('blob1');
+    const blob2 = document.getElementById('blob2');
+    const blob3 = document.getElementById('blob3');
+    const satBackground = document.getElementById('sat-background');
+    const scrollDownArrow = document.getElementById('scroll-down-arrow');
+    const aiChatForm = document.getElementById('ai-chat-form');
+    const aiChatInput = document.getElementById('ai-chat-input');
+    const loginButton = document.getElementById('login-button');
+    const signupButton = document.getElementById('signup-button');
+    
+    // SAT vocabulary words with definitions
+    const satWords = [
+        { word: "Ambiguous", definition: "Open to multiple interpretations" },
+        { word: "Benevolent", definition: "Well-meaning and kindly" },
+        { word: "Cacophony", definition: "A harsh, discordant mixture of sounds" },
+        { word: "Diligent", definition: "Having or showing care in one's work" },
+        { word: "Ephemeral", definition: "Lasting for a very short time" },
+        { word: "Fastidious", definition: "Very attentive to accuracy and detail" },
+        { word: "Gregarious", definition: "Fond of company; sociable" },
+        { word: "Hackneyed", definition: "Overused and consequently lacking in insight" },
+        { word: "Iconoclast", definition: "A person who attacks cherished beliefs" },
+        { word: "Juxtapose", definition: "Place side by side for comparison" },
+        { word: "Laconic", definition: "Using very few words" },
+        { word: "Meticulous", definition: "Showing great attention to detail" },
+        { word: "Nefarious", definition: "Wicked or criminal" },
+        { word: "Obfuscate", definition: "Make obscure or unclear" },
+        { word: "Pragmatic", definition: "Dealing with things sensibly and realistically" }
+    ];
+    
+    // Math equations
+    const mathEquations = [
+        "y = mx + b",
+        "a² + b² = c²",
+        "E = mc²",
+        "(x + y)² = x² + 2xy + y²",
+        "sin²θ + cos²θ = 1",
+        "∫ f(x) dx",
+        "lim x→∞ (1 + 1/x)^x = e",
+        "f'(x) = lim h→0 [f(x+h) - f(x)]/h",
+        "P(A|B) = P(A ∩ B) / P(B)",
+        "x = (-b ± √(b² - 4ac)) / 2a",
+        "log(xy) = log(x) + log(y)",
+        "∑ n=1 to ∞ 1/n²= π²/6",
+        "d/dx [sin(x)] = cos(x)",
+        "∮ E·dl = -dΦB/dt",
+        "F = G(m₁m₂)/r²"
+    ];
+    
+    // Create SAT background elements with horizontal movement
+    function createSatBackgroundElements() {
+        // Clear existing elements
+        satBackground.innerHTML = '';
+        
+        // Create horizontal rows for words
+        const numRows = 10;
+        const rowHeight = window.innerHeight / numRows;
+        
+        // Create word elements
+        for (let i = 0; i < numRows; i++) {
+            const wordData = satWords[Math.floor(Math.random() * satWords.length)];
+            const element = document.createElement('div');
+            element.className = 'sat-element sat-word';
+            element.textContent = `${wordData.word}: ${wordData.definition}`;
+            
+            // Position in a horizontal line
+            const y = i * rowHeight + rowHeight/2;
+            // Alternate direction for each row
+            const direction = i % 2 === 0 ? 1 : -1;
+            const x = direction > 0 ? -300 : window.innerWidth;
+            
+            element.style.left = `${x}px`;
+            element.style.top = `${y}px`;
+            
+            // Set opacity to 50%
+            element.style.opacity = "0.5";
+            
+            // Add animation data - only horizontal movement
+            element.dataset.speedX = (direction * (0.5 + Math.random() * 0.5)).toString();
+            element.dataset.speedY = "0"; // No vertical movement
+            
+            satBackground.appendChild(element);
+        }
+        
+        // Create equation elements in horizontal lines
+        for (let i = 0; i < numRows; i++) {
+            const equation = mathEquations[Math.floor(Math.random() * mathEquations.length)];
+            const element = document.createElement('div');
+            element.className = 'sat-element sat-equation';
+            element.textContent = equation;
+            
+            // Position in a horizontal line, offset from words
+            const y = i * rowHeight + rowHeight/2 + rowHeight/3;
+            // Alternate direction for each row
+            const direction = i % 2 === 0 ? -1 : 1;
+            const x = direction > 0 ? -300 : window.innerWidth;
+            
+            element.style.left = `${x}px`;
+            element.style.top = `${y}px`;
+            
+            // Set opacity to 50%
+            element.style.opacity = "0.5";
+            
+            // Add animation data - only horizontal movement
+            element.dataset.speedX = (direction * (0.3 + Math.random() * 0.4)).toString();
+            element.dataset.speedY = "0"; // No vertical movement
+            
+            satBackground.appendChild(element);
+        }
+    }
+    
+    // Animate SAT background elements
+    function animateSatElements() {
+        const elements = document.querySelectorAll('.sat-element');
+        
+        elements.forEach(element => {
+            const rect = element.getBoundingClientRect();
+            let x = parseFloat(element.style.left);
+            
+            const speedX = parseFloat(element.dataset.speedX);
+            
+            x += speedX;
+            
+            // Boundary check and wrap around
+            if (speedX > 0 && x > window.innerWidth) {
+                x = -rect.width;
+            } else if (speedX < 0 && x < -rect.width) {
+                x = window.innerWidth;
+            }
+            
+            element.style.left = `${x}px`;
+        });
+        
+        requestAnimationFrame(animateSatElements);
+    }
+    
+    // Initialize SAT background
+    createSatBackgroundElements();
+    animateSatElements();
+    
+    // Recreate elements on window resize
+    window.addEventListener('resize', createSatBackgroundElements);
+    
+    // Scroll down arrow click event
+    scrollDownArrow.addEventListener('click', function() {
+        const featuresSection = document.querySelector('.features-section');
+        featuresSection.scrollIntoView({ behavior: 'smooth' });
+    });
+    
+    // AI Chat form submission
+    aiChatForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        if (aiChatInput.value.trim() !== '') {
+            window.location.href = 'https://kv3eqtlnmpcgchz7odgmc2.streamlit.app/';
+        }
+    });
+    
+    // Login and Signup buttons redirect to the same URL as AI chat
+    loginButton.addEventListener('click', function() {
+        window.location.href = 'https://kv3eqtlnmpcgchz7odgmc2.streamlit.app/';
+    });
+    
+    signupButton.addEventListener('click', function() {
+        window.location.href = 'https://kv3eqtlnmpcgchz7odgmc2.streamlit.app/';
+    });
+    
+    // Initialize mouse position
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+    
+    // Update mouse position on mouse move
+    document.addEventListener('mousemove', function(e) {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+    });
+    
+    // Position blobs initially
+    function updateBlobPosition(blob, x, y) {
+        const blobWidth = parseInt(blob.style.width || '400');
+        const blobHeight = parseInt(blob.style.height || '400');
+        blob.style.left = (x - blobWidth / 2) + 'px';
+        blob.style.top = (y - blobHeight / 2) + 'px';
+    }
+    
+    // Set initial positions
+    updateBlobPosition(blob1, mouseX, mouseY);
+    updateBlobPosition(blob2, mouseX, mouseY);
+    updateBlobPosition(blob3, mouseX, mouseY);
+    
+    // Animate blobs to follow cursor with different speeds
+    function animateBlobs() {
+        // Blob 1 - slowest
+        const blob1X = parseInt(blob1.style.left || '0');
+        const blob1Y = parseInt(blob1.style.top || '0');
+        const blob1Width = parseInt(blob1.style.width || '600');
+        const blob1Height = parseInt(blob1.style.height || '600');
+        blob1.style.left = (blob1X + (mouseX - blob1Width/2 - blob1X) * 0.05) + 'px';
+        blob1.style.top = (blob1Y + (mouseY - blob1Height/2 - blob1Y) * 0.05) + 'px';
+        
+        // Blob 2 - medium speed
+        const blob2X = parseInt(blob2.style.left || '0');
+        const blob2Y = parseInt(blob2.style.top || '0');
+        const blob2Width = parseInt(blob2.style.width || '400');
+        const blob2Height = parseInt(blob2.style.height || '400');
+        blob2.style.left = (blob2X + (mouseX - blob2Width/2 - blob2X) * 0.1) + 'px';
+        blob2.style.top = (blob2Y + (mouseY - blob2Height/2 - blob2Y) * 0.1) + 'px';
+        
+        // Blob 3 - fastest
+        const blob3X = parseInt(blob3.style.left || '0');
+        const blob3Y = parseInt(blob3.style.top || '0');
+        const blob3Width = parseInt(blob3.style.width || '300');
+        const blob3Height = parseInt(blob3.style.height || '300');
+        blob3.style.left = (blob3X + (mouseX - blob3Width/2 - blob3X) * 0.15) + 'px';
+        blob3.style.top = (blob3Y + (mouseY - blob3Height/2 - blob3Y) * 0.15) + 'px';
+        
+        requestAnimationFrame(animateBlobs);
+    }
+    
+    // Start blob animation
+    animateBlobs();
+    
+    // Function to show a specific section with smooth transitions
+    function showSection(sectionId) {
+        // Fade out current section
+        const currentSection = document.querySelector('section.active');
+        currentSection.classList.add('fade-out');
+        
+        // Update body classes
+        body.classList.remove('home-active', 'games-active', 'notes-active', 'ai-active', 'friends-active', 'settings-active', 'login-active', 'mission-vision-active');
+        body.classList.add(sectionId + '-active');
+        
+        // After transition, update sections
+        setTimeout(() => {
+            // Hide all sections
+            sections.forEach(section => {
+                section.classList.remove('active', 'fade-out');
+                section.style.display = 'none';
+                section.style.opacity = '0';
+            });
+            
+            // Show selected section
+            const activeSection = document.getElementById(sectionId);
+            activeSection.classList.add('active');
+            activeSection.style.display = 'block';
+            
+            // Ensure display takes effect before changing opacity
+            setTimeout(() => {
+                activeSection.style.opacity = '1';
+            }, 10);
+            
+            // Update active nav link
+            navLinks.forEach(link => {
+                link.classList.toggle('active', link.getAttribute('data-section') === sectionId);
+            });
+        }, 500);
+    }
+    
+    // Add click event listeners to nav links
+    navLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            showSection(this.getAttribute('data-section'));
+        });
+    });
+    
+    // Add click event listeners to back buttons
+    backButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            showSection(this.getAttribute('data-section'));
+        });
+    });
+    
+    // Add click event listeners to feature buttons
+    featureButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            showSection(this.getAttribute('data-section'));
+        });
+    });
+});
+</script>
+</body>
+</html>
