@@ -1,1 +1,11 @@
-
+name: Deploy Workflow
+on:
+  push:
+    branches:
+      - main
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Placeholder Step
+        run: echo "This is a temporary deploy workflow"
